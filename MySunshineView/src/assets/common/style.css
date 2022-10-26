@@ -1,0 +1,16 @@
+:root {
+  --blue: #0e0620;
+  --white: #fff;
+  --red: #F07098;
+  --menuBackground: #1e2d3d;
+  --color:var(--white)
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+span{
+  display: inline-block;
+}
