@@ -46,12 +46,18 @@
 <script setup>
   import { reactive } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
+  import Menu from '../router/menu';
 
+  const { commit }  = useStore();
   const router = useRouter();
-  const form = reactive({userName: '隔壁老王', passWord:'admin123'});
+  const form = reactive({userName: 'admin', passWord:'admin123'});
 
   const login = () => {
-    router.push('./')
+    commit('acount/setUserInfo','9527');
+    commit('acount/setTokenInfo','95270987');
+    commit('acount/setRoutes',Menu);
+    router.push('./');
   }
 
 </script>

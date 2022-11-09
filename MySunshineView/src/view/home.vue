@@ -3,15 +3,8 @@
   <div>home</div>
 </template>
 
-<script>
-export default {
-  name: '',
-  data () {
-    return {
-    };
-  },
-  methods: {}
-}
+<script setup>
+
 
 </script>
 <style scoped>

@@ -2,21 +2,29 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="200px" class="mySide">
-        <Aside />
+        <Aside :isCollapsed="isCollapsed" />
       </el-aside>
       <el-main>
-        <Main />
+        <Header :isCollapsed="isCollapsed"/>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </div>
 </template>
 <script setup>
-import Main from './Main.vue'
-import Aside from './Aside.vue'
+  import Aside from './Aside.vue'
+  import Header from './Header.vue'
+  import { reactive, ref } from 'vue'
+
+  let isCollapsed = ref(false);
 </script>
 <style scoped>
 .mySide{
   height: 100vh;
   background-color: var(--menuBackground);
+  overflow-y: scroll;
+}
+.mySide::-webkit-scrollbar {
+  width: 0;
 }
 </style>

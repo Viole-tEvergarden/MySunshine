@@ -1,67 +1,93 @@
+<!-- slider -->
 <template>
-  <el-menu
-    default-active="2"
-    background-color="#1e2d3d"
-    text-color="#FFF"
-    class="el-menu-vertical-demo"
-    :collapse="isCollapse"
-    @open="handleOpen"
-    @close="handleClose"
-  >
-    <el-sub-menu index="1">
-      <template #title>
-        <i class="iconfont i-lang"></i>
-        <span>Navigator One</span>
+  <div class="slider">
+    <div class="logo">
+      <span v-if="!isCollapsed">MySunShine</span>
+    </div>
+    <el-menu
+        text-color="var(--white)"
+        active-text-color="var(--red)"
+        background-color="var(--menuBackground)"
+        class="el-menu-vertical-demo"
+        :collapse="props.isCollapse"
+        unique-opened
+        router
+      >
+      <template v-for="item in menu">
+        <template v-if="item.children">
+          <el-sub-menu :index="item.path" :key="item.path">
+            <template #title>
+              <i :class="`iconfont ${item.icon}`"></i>
+              <span>{{ item.meta.title }}</span>
+            </template>
+            <template v-for="subItem in item.children">
+              <el-sub-menu
+                v-if="subItem.children"
+                :index="subItem.path"
+                :key="subItem.path"
+              >
+                <template #title>{{ subItem.meta.title }}</template>
+                <el-menu-item
+                  v-for="(threeItem, i) in subItem.children"
+                  :key="i"
+                  :index="threeItem.path"
+                  >{{ threeItem.meta.title }}</el-menu-item
+                >
+              </el-sub-menu>
+              <el-menu-item
+                v-else
+                :index="subItem.path"
+                :key="subItem.path + 1"
+                >{{ subItem.meta.title }}</el-menu-item>
+            </template>
+          </el-sub-menu>
+        </template>
+        <template v-else>
+          <el-menu-item :index="item.path" :key="item.path">
+            <i :class="`iconfont ${item.icon}`"></i>
+            <span slot="title">{{ item.meta.title }}</span>
+          </el-menu-item>
+        </template>
       </template>
-      <el-menu-item-group>
-        <template #title><span>Group One</span></template>
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item two</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title><span>item four</span></template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <template #title>Navigator Two</template>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon><document /></el-icon>
-      <template #title>Navigator Three</template>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon><setting /></el-icon>
-      <template #title>Navigator Four</template>
-    </el-menu-item>
-  </el-menu>
+      </el-menu>
+  </div>
+
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from '@element-plus/icons-vue'
+  import { reactive } from 'vue'
+  import { useStore } from 'vuex'
+  const props = defineProps(['isCollapsed']) 
 
-const isCollapse = ref(false)
-const handleOpen = (key, keyPath) => {
-  // console.log(key, keyPath)
-}
-const handleClose = (key, keyPath) => {
-  // console.log(key, keyPath)
-}
+  const { state }  = useStore();
+  let menu = reactive([]);
+
+
+  menu = fillterNotMenu(state.acount.routes);
+  // 过滤不是menu的路由项
+  function fillterNotMenu(menu) {
+    return menu.reduce((prev, cur) => {
+      if(!cur.NOTMN){
+        prev.push({
+          ...cur,
+          path: cur.path.substring(1),//这里因为el-,el-menu 的 index 要用, 要把'/'去掉,不然hover效果没得,小白表示不知道为啥
+          children: cur.children?fillterNotMenu(cur.children):undefined, //这里用空数组的话menu会认为有子菜单所以选择undefined
+        })
+      }
+      return prev
+    }, [])
+  }
 </script>
-
 <style scoped>
-.layout-container-demo .el-aside {
-  color: var(--el-text-color-primary);
-  background: var(--menuBackground);
+.logo{
+  height:70px;
+  color: var(--red);
+  line-height: 70px;
+  font-size: 25px;
+  text-align: center;
+}
+
+.iconfont{
+  margin-right: 10px;
 }
 </style>

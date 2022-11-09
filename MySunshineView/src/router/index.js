@@ -4,7 +4,14 @@ import { createRouter, createWebHashHistory } from "vue-router";
 const routes = [
   {
     path: '/',
-    component: () => import('@/components/layout/layout.vue')
+    component: () => import('@/components/layout/layout.vue'),
+    redirect: '/home',
+    children:[
+      {
+        path: '/home',
+        component: ()=>import('@/view/home.vue')
+      }
+    ]
   },
   {
     path: '/login',
