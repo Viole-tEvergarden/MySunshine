@@ -27,4 +27,8 @@
 .mySide::-webkit-scrollbar {
   width: 0;
 }
+::v-deep .el-main{
+  position: relative;
+  padding-top: 90px;
+}
 </style>

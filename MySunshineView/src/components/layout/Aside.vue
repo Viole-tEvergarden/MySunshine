@@ -54,7 +54,7 @@
 
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { reactive } from 'vue'
   import { useStore } from 'vuex'
   const props = defineProps(['isCollapsed']) 
