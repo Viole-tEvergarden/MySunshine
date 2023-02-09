@@ -3,7 +3,7 @@
   <div class="header">
     <div class="header-left">
       <span :class="value?'flod flodrotade':'flod'" @click="flod()">
-        <i class="el-icon-s-unfold"></i>
+        <el-icon :color="IconColor"><Fold /></el-icon>
       </span>
       <!-- 全屏 -->
       <div class="btn-fullscreen" @click="handleFullScreen">
@@ -25,18 +25,20 @@
           <img src="../../assets/img/header.jpg" />
       </div>
       <!-- 用户名下拉菜单 -->
-      <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
-          <span class="el-dropdown-link">
-              {{state.acount.username}}
-              <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-              <a href="https://www.baidu.com" target="_blank">
-                  <el-dropdown-item>转去百度</el-dropdown-item>
-              </a>
-              <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-      </el-dropdown>
+      <a-dropdown>
+        <a class="ant-dropdown-link" @click.prevent>
+          {{state.acount.username}}
+
+        </a>
+        <template #overlay>
+          <a-menu @click="handleCommand">
+            <a-menu-item key="loginout">
+              <a href="javascript:;">退出登录</a>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+      
     </div>
   </div>
 </template>
@@ -44,26 +46,31 @@
 <script setup>
   import { reactive, ref, onMounted, watch } from 'vue'
   import { useStore } from 'vuex';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
 
   const { state } = useStore();
-  const router = useRoute();
+  const route = useRoute();
+  const router = useRouter();
   const props = defineProps(['isCollapsed']);
+  const emit = defineEmits(['onupdateIsCollapsed'])
   let fullscreen = ref(false);//是否全屏
   let breadList = reactive([]);//面包屑数据
+  const IconColor = ref('#000000'); //icon 颜色
+  const { commit }  = useStore();
 
-  watch(()=>router.currentRoute?.value.path, getBreadcrumb, { immediate: true, deep: true});
+  watch(()=>route.currentRoute?.value.path, getBreadcrumb, { immediate: true, deep: true});
 
   onMounted(()=>{
     if (document.body.clientWidth < 1500)flod();
   })
 
   function flod(){// 收缩Menu
-      // this.$emit('input', !this.value);
+    console.log(props.isCollapsed);
+    emit('onupdateIsCollapsed', !props.isCollapsed);
   }
   
   function getBreadcrumb() {
-    let matched = router.matched;
+    let matched = route.matched;
     matched.map((item,i)=>{
       if (!item.meta.title) {
         matched.splice(i,1)
@@ -75,16 +82,16 @@
     }
     breadList = matched;
   }
-  function handleCommand(item){ //用户名下拉菜单回调函数
-    switch (item) {
+  function handleCommand({key}){ //用户名下拉菜单回调函数
+    switch (key) {
       case 'loginout':
-        setItem('token',false);
-        router.push('/login');
+        commit('acount/setTokenInfo',false);
+        router.push('./login');
         break;
     }
   }
   function isHome(route){//当前路由是否为主页
-    return route.name === "home";
+    // return route.name === "home";
   }
   function handleFullScreen(){//全屏显示
     let element = document.documentElement;

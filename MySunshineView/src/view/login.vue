@@ -57,7 +57,7 @@
     commit('acount/setUserInfo','9527');
     commit('acount/setTokenInfo','95270987');
     commit('acount/setRoutes',Menu);
-    router.push('./');
+    router.push('/home');
   }
 
 </script>
@@ -69,7 +69,7 @@
   right: 0;
   bottom: 0;
   background-image: url('../assets/img/loginBackGround.jpg');
-  background-size: 100% 100%;
+  background-size: cover;
   font-size: 14px;
   .loginMain{
     width: 300px;
@@ -114,7 +114,7 @@
 .textRight{
   text-align: right;
 }
-::v-deep .el-button{
+:deep .el-button{
   width: 100%;
 }
 </style>

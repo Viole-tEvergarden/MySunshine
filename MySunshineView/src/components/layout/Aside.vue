@@ -9,7 +9,8 @@
         active-text-color="var(--red)"
         background-color="var(--menuBackground)"
         class="el-menu-vertical-demo"
-        :collapse="props.isCollapse"
+        :collapse="isCollapsed"
+        :collapse-transition="false"
         unique-opened
         router
       >

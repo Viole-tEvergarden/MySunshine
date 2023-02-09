@@ -20,10 +20,14 @@ export default {
             }
         },
         setTokenInfo(state, token) {
-            //token信息，执行登录操作时进行保存，时间7天
+            //token信息，执行登录操作时进行保存
             state.tokenInfo = token;
             if (token) {
-                Cookie.set("tokenInfo", JSON.stringify(token), {expires: 7});
+                Cookie.set(
+                    "tokenInfo", 
+                    JSON.stringify(token), 
+                    // {expires: 7} ,//设置时间
+                );
             } else {
                 Cookie.remove("tokenInfo");
             }

@@ -8,7 +8,6 @@ export default [
     icon:'i-lang',
     meta: { title: 'Vue' },
     redirect: '/Mixin',
-    component: 'layout',
     children:[
       {
         path: '/Mixin',
@@ -37,7 +36,6 @@ export default [
     icon:'i-gongji',
     meta: { title: '数据相关' },
     redirect: '/VueEditor',
-    component: 'layout',
     children:[
       {
         path: '/VueEditor',
@@ -56,7 +54,6 @@ export default [
     icon:'i-maotouying',
     meta: { title: '其他' },
     redirect: '/eventDelegation',
-    component: 'layout',
     children:[
       {
         path: '/eventDelegation',

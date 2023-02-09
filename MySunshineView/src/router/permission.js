@@ -11,10 +11,9 @@ router.beforeEach( (to, from, next) => {
     if (to.path === '/login') {
       next({path:'/home'})
     } else {
-      if (JSON.stringify(state.acount.routes) === '[]') {
+      if (JSON.stringify(state.acount.routes) === '[]'||true) {
         let asycRoute = createrRoute(state.acount.routes);
-        // console.log(asycRoute);
-        router.addRoutes(asycRoute)
+        router.addRoute(asycRoute)
       }
       next()
     }
