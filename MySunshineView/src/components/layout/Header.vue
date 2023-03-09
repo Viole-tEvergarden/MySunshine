@@ -2,21 +2,17 @@
 <template>
   <div class="header">
     <div class="header-left">
-      <span :class="value?'flod flodrotade':'flod'" @click="flod()">
-        <el-icon :color="IconColor"><Fold /></el-icon>
-      </span>
       <!-- 全屏 -->
       <div class="btn-fullscreen" @click="handleFullScreen">
         <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-            <i class="el-icon-rank"></i>
+          <fullscreen-outlined v-if="!fullscreen" :rotate="45"/>
+          <fullscreen-exit-outlined v-if="fullscreen" :rotate="45"/>
         </el-tooltip>
       </div>
       <!-- 面包屑 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item v-for="item in breadList" :key="item.path" :to="{ path: item.path }">
-          {{item.meta.title}}
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <a-breadcrumb style="margin: 16px 0">
+        <a-breadcrumb-item v-for="item in breadList" :key="item.path" :to="{ path: item.path }">{{item.meta.title}}</a-breadcrumb-item>
+      </a-breadcrumb>
     </div>
     
     <div class="header-right">
@@ -28,7 +24,6 @@
       <a-dropdown>
         <a class="ant-dropdown-link" @click.prevent>
           {{state.acount.username}}
-
         </a>
         <template #overlay>
           <a-menu @click="handleCommand">
@@ -44,44 +39,21 @@
 </template>
 
 <script setup>
-  import { reactive, ref, onMounted, watch } from 'vue'
   import { useStore } from 'vuex';
-  import { useRoute, useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
 
   const { state } = useStore();
-  const route = useRoute();
   const router = useRouter();
-  const props = defineProps(['isCollapsed']);
-  const emit = defineEmits(['onupdateIsCollapsed'])
+  const route = router.currentRoute.value;
   let fullscreen = ref(false);//是否全屏
-  let breadList = reactive([]);//面包屑数据
-  const IconColor = ref('#000000'); //icon 颜色
   const { commit }  = useStore();
 
-  watch(()=>route.currentRoute?.value.path, getBreadcrumb, { immediate: true, deep: true});
+  const breadList = computed(()=>{
+      // 过滤掉没有meta的 
+      return router.currentRoute.value.matched.filter(item=>item.meta.title)
+  })//面包屑数据
 
-  onMounted(()=>{
-    if (document.body.clientWidth < 1500)flod();
-  })
 
-  function flod(){// 收缩Menu
-    console.log(props.isCollapsed);
-    emit('onupdateIsCollapsed', !props.isCollapsed);
-  }
-  
-  function getBreadcrumb() {
-    let matched = route.matched;
-    matched.map((item,i)=>{
-      if (!item.meta.title) {
-        matched.splice(i,1)
-      }
-    })
-    //如果不是首页
-    if (!isHome(matched[0])) {
-      matched = [{ path: "/layout", meta: { title: "首页" } }].concat(matched);
-    }
-    breadList = matched;
-  }
   function handleCommand({key}){ //用户名下拉菜单回调函数
     switch (key) {
       case 'loginout':
@@ -90,12 +62,10 @@
         break;
     }
   }
-  function isHome(route){//当前路由是否为主页
-    // return route.name === "home";
-  }
+
   function handleFullScreen(){//全屏显示
     let element = document.documentElement;
-    if (fullscreen) {
+    if (fullscreen.value) {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.webkitCancelFullScreen) {
@@ -117,7 +87,7 @@
             element.msRequestFullscreen();
         }
     }
-    fullscreen = !fullscreen;
+    fullscreen.value = !fullscreen.value;
   }
 </script>
 <style scoped>
@@ -126,7 +96,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 55px;
   padding: 0 15px;
   display: flex;
   align-items: center;

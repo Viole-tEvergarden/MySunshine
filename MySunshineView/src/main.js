@@ -13,9 +13,7 @@ import 'ant-design-vue/dist/antd.css';
 
 // iconFont Icon
 import './assets/icon/iconfont.css'
-// elementPlus Icon
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-
+import * as AntIconsVue from '@ant-design/icons-vue';
 // vuex 
 import { Store } from "./store/index";
 
@@ -24,7 +22,7 @@ import { Store } from "./store/index";
 const app = createApp(App);
 
 // 注册 Icon
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+for (const [key, component] of Object.entries(AntIconsVue)) {
   app.component(key, component)
 }
 

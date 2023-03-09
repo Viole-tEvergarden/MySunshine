@@ -13,7 +13,10 @@ router.beforeEach( (to, from, next) => {
     } else {
       if (JSON.stringify(state.acount.routes) === '[]'||true) {
         let asycRoute = createrRoute(state.acount.routes);
-        router.addRoute(asycRoute)
+        asycRoute.forEach(item=>{
+          router.addRoute(item)
+        })
+        
       }
       next()
     }
