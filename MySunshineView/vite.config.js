@@ -14,7 +14,7 @@ export default defineConfig({
   resolve: {
     // vite 路径别名配置
     alias: {
-      '@': path.resolve('./src'), // 使用 @ 替换 ./src
+      '@': path.resolve(__dirname,'src')
     },
     css: {
       // 定义全局 scss 文件路径

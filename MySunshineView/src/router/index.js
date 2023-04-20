@@ -14,6 +14,20 @@ const routes = [
     path: '/login',
     component: () => import('@/view/login.vue')
   },
+  {
+    path: '/Vue',
+    icon: 'i-lang',
+    meta: { title: 'Vue' },
+    redirect: '/Mixin',
+    children: [
+      {
+        path: '/Mixin',
+        meta: { title: 'Mixin' },
+        component: ()=> import('@/view/Mixin.vue'),
+      },
+      
+    ]
+  },
 ]
 
 //创建路由实例并传递 routes 配置

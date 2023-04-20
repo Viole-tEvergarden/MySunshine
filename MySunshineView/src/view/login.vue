@@ -47,7 +47,6 @@
   import { reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { useStore } from 'vuex'
-  import Menu from '../router/menu';
 
   const { commit }  = useStore();
   const router = useRouter();
@@ -56,7 +55,6 @@
   const login = () => {
     commit('acount/setUserInfo','9527');
     commit('acount/setTokenInfo','95270987');
-    commit('acount/setRoutes',Menu);
     router.push('/home');
   }
 
